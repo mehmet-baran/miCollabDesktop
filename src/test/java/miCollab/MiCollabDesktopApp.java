@@ -63,34 +63,6 @@ public class MiCollabDesktopApp {
     }
 
     @Test
-    public void outgoingCallTest() throws InterruptedException, IOException {
-        String phoneNumber = "+447526537662";
-        Thread.sleep(20000);
-        driver.findElement(By.name("System")).click();
-        Actions action = new Actions(driver);
-        action.sendKeys(Keys.ENTER).perform();
-        File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        FileHandler.copy(screenshot, new File(System.getProperty("user.dir") + "\\Screenshot.png"));
-        BufferedImage expected = ImageIO.read(new File(System.getProperty("user.dir") + "\\ScreenshotExpected.png"));
-        BufferedImage actual = ImageIO.read(screenshot);
-        ImageDiffer imageDiffer = new ImageDiffer();
-        ImageDiff diff = imageDiffer.makeDiff(expected, actual);
-        System.out.println("diff.hasDiff() = " + diff.hasDiff());
-        Actions actions = new Actions(driver);
-        actions.sendKeys(Keys.TAB).perform();
-        actions.sendKeys(Keys.ENTER).perform();
-        actions.sendKeys(Keys.TAB).perform();
-        actions.sendKeys(phoneNumber).perform();
-        actions.sendKeys(Keys.ENTER).perform();
-        Thread.sleep(2000);
-        String xpath1 = "//Image[@AutomationId='PART_image'][1]";
-        driver.findElement(By.xpath(xpath1)).click();
-        Thread.sleep(2000);
-        actions.keyDown(Keys.CONTROL).sendKeys(Keys.NUMPAD2).perform();
-        actions.release().sendKeys(Keys.CONTROL).perform();
-    }
-
-    @Test
     public void incomingCallTest() throws InterruptedException, IOException {
         int testDurationInDays = 30;
         LocalDateTime finalTime = LocalDateTime.now().plus(Duration.ofDays(testDurationInDays));
@@ -135,14 +107,6 @@ public class MiCollabDesktopApp {
                     }
                 }
             }
-//            File screenshotFinal = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-//            FileUtils.copyFile(screenshotFinal, new File(System.getProperty("user.dir") + "\\Screenshot3.png"));
-//            BufferedImage finalImage = ImageIO.read(screenshotFinal);
-//            System.out.println("isSimilar(finalImage,showStopperImage) = " + isSimilar(finalImage, showStopperImage));
-//            if(isSimilar(finalImage, showStopperImage)){
-//                System.out.println("test finished");
-//                break;
-//            }
         }
 
         System.out.println("numberOfCalls = " + numberOfCalls);
