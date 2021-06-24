@@ -16,6 +16,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.imageio.ImageIO;
+import javax.tools.Tool;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,6 +25,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalField;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MiCollabDesktopApp {
@@ -63,15 +70,19 @@ public class MiCollabDesktopApp {
     @Test
     public void incomingCallTest() throws InterruptedException, IOException, AWTException {
         int testDurationInDays = 30;
+        double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        int lineXcoordinate= (int) (0.5515*screenWidth);
+        int holdButtonXcoordinate= (int) (lineXcoordinate+ (screenWidth-lineXcoordinate)/2 +90);
+        int holdButtonYcoordinate= (int) (screenHeight-90);
         LocalDateTime finalTime = LocalDateTime.now().plus(Duration.ofDays(testDurationInDays));
         Thread.sleep(23000);
         Actions action = new Actions(driver);
         driver.findElement(By.name("System")).click();
         driver.findElement(By.name("Maximize")).click();
-        Point systemLocation = driver.findElement(By.name("System")).getLocation();
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         Robot robot = new Robot();
-        robot.mouseMove(Integer.parseInt(ConfigurationReader.get("okButton_X_Coordinate")), Integer.parseInt(ConfigurationReader.get("okButton_Y_Coordinate")));
+        robot.mouseMove((int) (screenWidth/2), 544);
         Thread.sleep(1000);
         action.doubleClick().perform();
         BufferedImage beforeCallImage1 = ImageIO.read(new File("src/test/resources/beforecall1.png"));
@@ -79,6 +90,8 @@ public class MiCollabDesktopApp {
         BufferedImage showStopperImage = ImageIO.read(new File("src/test/resources/showStopper.png"));
 
         int numberOfIncomingCalls = 0;
+
+
         while (LocalDateTime.now().isBefore(finalTime)) {
             Thread.sleep(1000);
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -89,6 +102,10 @@ public class MiCollabDesktopApp {
             } else if (isSimilarSensitive(screenshotImage, showStopperImage)) {
                 break;
             } else {
+
+                LocalTime incomingCallTime = LocalTime.now();
+                int holdPeriod=2;
+
                 numberOfIncomingCalls++;
                 boolean flag = true;
                 while (flag) {
@@ -98,10 +115,15 @@ public class MiCollabDesktopApp {
                     File screenshotAfterCall = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
                     FileUtils.copyFile(screenshotAfterCall, new File(System.getProperty("user.dir") + "\\Screenshot2.png"));
                     BufferedImage afterCallImage = ImageIO.read(screenshotAfterCall);
-                    Thread.sleep(3000);
-                    Robot newRobot = new Robot();
-                    newRobot.mouseMove(Integer.parseInt(ConfigurationReader.get("holdButton_X_Coordinate")), Integer.parseInt(ConfigurationReader.get("holdButton_Y_Coordinate")));
-                    action.click().perform();
+                    if(LocalTime.now().isAfter(incomingCallTime.plus(holdPeriod,ChronoUnit.MINUTES).minus(5,ChronoUnit.SECONDS)) && LocalTime.now().isBefore(incomingCallTime.plus(holdPeriod,ChronoUnit.MINUTES))){
+                        Robot newRobot = new Robot();
+                        newRobot.mouseMove(holdButtonXcoordinate, holdButtonYcoordinate);
+                        action.click().perform();
+                        Thread.sleep(3000);
+                        action.click().perform();
+                        holdPeriod=holdPeriod+2;
+                    }
+
                     if (!isSimilar(afterCallImage, beforeCallImage1)) {
                         Thread.sleep(1000);
                     } else if (isSimilar(afterCallImage, showStopperImage)) {
@@ -114,7 +136,7 @@ public class MiCollabDesktopApp {
         }
 
         System.out.println("Number of incoming calls during the test = " + numberOfIncomingCalls);
-        robot.mouseMove(Integer.parseInt(ConfigurationReader.get("callHistoryButton_X_Coordinate")), Integer.parseInt(ConfigurationReader.get("callHistoryButton_Y_Coordinate")));
+        robot.mouseMove(90,270);
         action.click().perform();
         Thread.sleep(1000);
         File callHistory = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
