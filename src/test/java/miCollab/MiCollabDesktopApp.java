@@ -78,9 +78,10 @@ public class MiCollabDesktopApp {
         double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         int lineXcoordinate = (int) (0.5515 * screenWidth);
         int holdButtonXcoordinate = (int) (lineXcoordinate + (screenWidth - lineXcoordinate) / 2 + 90);
-        int holdButtonYcoordinate = (int) (screenHeight - 90);
+        int holdButtonYcoordinate = (int) (screenHeight - 100);
         int acceptButtonXcoordinate=(int)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
         int acceptButtonYcoordinate = (int) ((screenHeight-40)*0.774);
+
         LocalDateTime finalTime = LocalDateTime.now().plus(Duration.ofDays(testDurationInDays));
         Thread.sleep(23000);
         Actions action = new Actions(driver);
