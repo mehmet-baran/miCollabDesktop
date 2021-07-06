@@ -1,13 +1,14 @@
 package miCollab;
 
 import io.appium.java_client.windows.WindowsDriver;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import miCollab.pages.PageInitializer;
 import miCollab.utilities.ConfigurationReader;
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.OutputType;
+import org.openqa.selenium.*;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
@@ -32,6 +33,9 @@ import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static miCollab.pages.PageInitializer.*;
+import static miCollab.utilities.CommonSteps.waitFor;
 
 public class MiCollabDesktopApp {
 
@@ -75,6 +79,8 @@ public class MiCollabDesktopApp {
         int lineXcoordinate = (int) (0.5515 * screenWidth);
         int holdButtonXcoordinate = (int) (lineXcoordinate + (screenWidth - lineXcoordinate) / 2 + 90);
         int holdButtonYcoordinate = (int) (screenHeight - 90);
+        int acceptButtonXcoordinate=(int)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
+        int acceptButtonYcoordinate = (int) ((screenHeight-40)*0.774);
         LocalDateTime finalTime = LocalDateTime.now().plus(Duration.ofDays(testDurationInDays));
         Thread.sleep(23000);
         Actions action = new Actions(driver);
@@ -105,12 +111,10 @@ public class MiCollabDesktopApp {
         int numberOfIncomingCalls = 0;
 
         while (LocalDateTime.now().isBefore(finalTime)) {
-            Thread.sleep(1000);
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(screenshot, new File(System.getProperty("user.dir") + "\\Screenshot1.png"));
             BufferedImage screenshotImage = ImageIO.read(screenshot);
             if (isSimilarSensitive(screenshotImage, beforeCallImage)) {
-                Thread.sleep(1000);
             } else if (isSimilarSensitive(screenshotImage, showStopperImage)) {
                 break;
             } else {
@@ -119,9 +123,11 @@ public class MiCollabDesktopApp {
                 numberOfIncomingCalls++;
                 boolean flag = true;
                 while (flag) {
+                    robot.mouseMove(acceptButtonXcoordinate, acceptButtonYcoordinate);
+                    action.click().perform();
                     action.keyDown(Keys.CONTROL).sendKeys(Keys.NUMPAD1).perform();
                     action.release().sendKeys(Keys.CONTROL).perform();
-                    Thread.sleep(1000);
+                    Thread.sleep(300);
                     File screenshotAfterCall = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
                     FileUtils.copyFile(screenshotAfterCall, new File(System.getProperty("user.dir") + "\\Screenshot2.png"));
                     BufferedImage afterCallImage = ImageIO.read(screenshotAfterCall);
@@ -135,7 +141,7 @@ public class MiCollabDesktopApp {
                     }
 
                     if (!isSimilar(afterCallImage, beforeCallImage)) {
-                        Thread.sleep(1000);
+                        Thread.sleep(300);
                     } else if (isSimilar(afterCallImage, showStopperImage)) {
                         break;
                     } else {
