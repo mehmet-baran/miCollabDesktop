@@ -1,23 +1,15 @@
 package miCollab;
 
 import io.appium.java_client.windows.WindowsDriver;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import miCollab.pages.PageInitializer;
-import miCollab.utilities.ConfigurationReader;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
 import javax.imageio.ImageIO;
-import javax.tools.Tool;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -28,21 +20,14 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalField;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static miCollab.pages.PageInitializer.*;
-import static miCollab.utilities.CommonSteps.waitFor;
 
 public class MiCollabDesktopApp {
 
     public static WindowsDriver driver = null;
 
     @BeforeMethod
-    public void setUp() throws IOException {
+    public void setUp() {
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability("app", "C:\\Program Files (x86)\\Mitel\\MiCollab\\MiCollab.exe");
         desiredCapabilities.setCapability("platformName", "Windows");
