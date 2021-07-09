@@ -73,14 +73,14 @@ public class MiCollabDesktopApp {
 
     @Test
     public void incomingCallTest() throws InterruptedException, IOException, AWTException {
-        int testDurationInDays = 30;
+        byte testDurationInDays = 30;
         double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-        int lineXcoordinate = (int) (0.5515 * screenWidth);
-        int holdButtonXcoordinate = (int) (lineXcoordinate + (screenWidth - lineXcoordinate) / 2 + 90);
-        int holdButtonYcoordinate = (int) (screenHeight - 100);
-        int acceptButtonXcoordinate=(int)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
-        int acceptButtonYcoordinate = (int) ((screenHeight-40)*0.774);
+        short lineXcoordinate = (short) (0.5515 * screenWidth);
+        short holdButtonXcoordinate = (short) (lineXcoordinate + (screenWidth - lineXcoordinate) / 2 + 90);
+        short holdButtonYcoordinate = (short) (screenHeight - 100);
+        short acceptButtonXcoordinate=(short)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
+        short acceptButtonYcoordinate = (short) ((screenHeight-40)*0.774);
 
         LocalDateTime finalTime = LocalDateTime.now().plus(Duration.ofDays(testDurationInDays));
         Thread.sleep(23000);
@@ -116,11 +116,12 @@ public class MiCollabDesktopApp {
             FileUtils.copyFile(screenshot, new File(System.getProperty("user.dir") + "\\Screenshot1.png"));
             BufferedImage screenshotImage = ImageIO.read(screenshot);
             if (isSimilarSensitive(screenshotImage, beforeCallImage)) {
+                Thread.sleep(500);
             } else if (isSimilarSensitive(screenshotImage, showStopperImage)) {
                 break;
             } else {
                 LocalTime incomingCallTime = LocalTime.now();
-                int holdPeriod = 2;
+                short holdPeriod = 2;
                 numberOfIncomingCalls++;
                 boolean flag = true;
                 while (flag) {
@@ -138,7 +139,7 @@ public class MiCollabDesktopApp {
                         action.click().perform();
                         Thread.sleep(3000);
                         action.click().perform();
-                        holdPeriod = holdPeriod + 2;
+                        holdPeriod = (short) (holdPeriod + 2);
                     }
 
                     if (!isSimilar(afterCallImage, beforeCallImage)) {
