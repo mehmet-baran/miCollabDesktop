@@ -125,6 +125,9 @@ public class MiCollabDesktopApp {
                 action.click().build().perform();
                 action.release().perform();
                 Thread.sleep(1000);
+                robot.mouseMove((int)(screenWidth/2), (int)(screenHeight/2));
+                action.click().build().perform();
+                action.release().perform();
             }
 
             if (isSimilarSensitive(screenshotImage, beforeCallImage)) {
