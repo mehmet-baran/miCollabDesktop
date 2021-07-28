@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +67,8 @@ public class MiCollabDesktopApp {
         short holdButtonYcoordinate = (short) (screenHeight - 100);
         short acceptButtonXcoordinate=(short)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
         short acceptButtonYcoordinate = (short) ((screenHeight-40)*0.774);
+        int statusXcoordinate = (int) (screenWidth-200);
+        int statusYcoordinate = (int) (screenHeight-75);
 
         LocalDateTime finalTime = LocalDateTime.now().plus(Duration.ofDays(testDurationInDays));
         Thread.sleep(23000);
@@ -93,6 +96,12 @@ public class MiCollabDesktopApp {
         //Clicking on Home button
         robot.mouseMove(90, 116);
         action.click().perform();
+        //Taking screenshot of the status
+        File statusScreenshot =((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        BufferedImage statusImage=ImageIO.read(statusScreenshot);
+        BufferedImage statusImagePartial = statusImage.getSubimage(statusXcoordinate, statusYcoordinate, 200,35);
+        ImageIO.write(statusImagePartial, "png",statusScreenshot);
+        FileUtils.copyFile(statusScreenshot,new File(System.getProperty("user.dir")+"\\status.png"));
 
         int numberOfIncomingCalls = 0;
 
@@ -100,6 +109,24 @@ public class MiCollabDesktopApp {
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(screenshot, new File(System.getProperty("user.dir") + "\\Screenshot1.png"));
             BufferedImage screenshotImage = ImageIO.read(screenshot);
+            //Checking the status
+            File statusCheckScreenshot =((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+            BufferedImage statusCheckImage=ImageIO.read(statusCheckScreenshot);
+            BufferedImage statusCheckImagePartial = statusCheckImage.getSubimage(statusXcoordinate, statusYcoordinate, 200,35);
+            ImageIO.write(statusCheckImagePartial, "png",statusCheckScreenshot);
+            FileUtils.copyFile(statusCheckScreenshot,new File(System.getProperty("user.dir")+"\\statusCheck.png"));
+
+            if(!isSimilarSensitive(statusImagePartial, statusCheckImagePartial)){
+                robot.mouseMove((int) (screenWidth-70), (int) (screenHeight-60));
+                action.click().build().perform();
+                action.release().perform();
+                Thread.sleep(1000);
+                robot.mouseMove((int)(screenWidth-50), (int)(screenHeight-215));
+                action.click().build().perform();
+                action.release().perform();
+                Thread.sleep(1000);
+            }
+
             if (isSimilarSensitive(screenshotImage, beforeCallImage)) {
                 Thread.sleep(500);
             } else if (isSimilarSensitive(screenshotImage, showStopperImage)) {
