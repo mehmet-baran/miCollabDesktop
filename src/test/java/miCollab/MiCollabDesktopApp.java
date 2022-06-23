@@ -109,8 +109,6 @@ public class MiCollabDesktopApp extends Tools {
                 while (flag) {
                     robot.mouseMove(acceptButtonXcoordinate, acceptButtonYcoordinate);
                     action.click().perform();
-                    action.keyDown(Keys.CONTROL).sendKeys(Keys.NUMPAD1).build().perform();
-                    action.release().sendKeys(Keys.CONTROL).build().perform();
                     Thread.sleep(300);
                     File screenshotAfterCall = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
                     FileUtils.copyFile(screenshotAfterCall, new File(System.getProperty("user.dir") + "\\Screenshot2.png"));

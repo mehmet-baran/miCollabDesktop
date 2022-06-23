@@ -33,6 +33,9 @@ public class DashboardPage extends CommonPageElements {
     @FindBy(css = "[data-hotkey-id='declineCall']")
     public WebElement endCallHotkey;
 
+    @FindBy(xpath = "//li[.='Settings']")
+    public WebElement settingsButton;
+
     public void clickOnButton(String buttonText) {
         driver.findElement(By.xpath("//div[@class='button-content'][.='" + buttonText + "']")).click();
     }

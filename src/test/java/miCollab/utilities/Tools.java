@@ -1,6 +1,7 @@
 package miCollab.utilities;
 
 import io.appium.java_client.windows.WindowsDriver;
+import io.appium.java_client.windows.WindowsElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -15,17 +16,17 @@ import static miCollab.MiCollabDesktopApp.driver;
 
 public class Tools {
 
-    public byte testDurationInDays = 30;
-    public double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-    public double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-    public short lineXcoordinate = (short) (0.5515 * screenWidth);
-    public short holdButtonXcoordinate = (short) (lineXcoordinate + (screenWidth - lineXcoordinate) / 2 + 90);
-    public short holdButtonYcoordinate = (short) (screenHeight - 100);
-    public short acceptButtonXcoordinate=(short)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
-    public short acceptButtonYcoordinate = (short) ((screenHeight-40)*0.774);
-    public int statusXcoordinate = (int) (screenWidth-200);
-    public int statusYcoordinate = (int) (screenHeight-75);
-    public short holdPeriod = 2;
+    public static byte testDurationInDays = 30;
+    public static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+    public static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    public static short lineXcoordinate = (short) (0.5515 * screenWidth);
+    public static short holdButtonXcoordinate = (short) (lineXcoordinate + (screenWidth - lineXcoordinate) / 2 + 90);
+    public static short holdButtonYcoordinate = (short) (screenHeight - 100);
+    public static short acceptButtonXcoordinate=(short)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
+    public static short acceptButtonYcoordinate = (short) ((screenHeight-40)*0.774);
+    public static int statusXcoordinate = (int) (screenWidth-200);
+    public static int statusYcoordinate = (int) (screenHeight-75);
+    public static short holdPeriod = 2;
 
     public static void selectMicollabFromTaskbar() throws InterruptedException, MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -132,10 +133,13 @@ public class Tools {
     public static void startMicollab(){
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability("app", "C:\\Program Files (x86)\\Mitel\\MiCollab\\MiCollab.exe");
+//        desiredCapabilities.setCapability("app", "com.mitel.ucamobile");
         desiredCapabilities.setCapability("platformName", "Windows");
         desiredCapabilities.setCapability("deviceName", "WindowsPC");
         try {
+
             driver = new WindowsDriver(new URL("http://127.0.0.1:4723"), desiredCapabilities);
+            //driver = new WindowsDriver<WindowsElement>(new URL("http://127.0.0.1:4723"), desiredCapabilities);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
