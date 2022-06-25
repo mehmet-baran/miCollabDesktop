@@ -2,12 +2,18 @@ package miCollab.utilities;
 
 import io.appium.java_client.windows.WindowsDriver;
 import io.appium.java_client.windows.WindowsElement;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +22,7 @@ import static miCollab.MiCollabDesktopApp.driver;
 
 public class Tools {
 
-    public static byte testDurationInDays = 30;
+    public static byte testDurationInDays = 2;
     public static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
     public static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public static short lineXcoordinate = (short) (0.5515 * screenWidth);
@@ -24,8 +30,8 @@ public class Tools {
     public static short holdButtonYcoordinate = (short) (screenHeight - 100);
     public static short acceptButtonXcoordinate=(short)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
     public static short acceptButtonYcoordinate = (short) ((screenHeight-40)*0.774);
-    public static int statusXcoordinate = (int) (screenWidth-200);
-    public static int statusYcoordinate = (int) (screenHeight-75);
+    public static int statusXcoordinate = (int) (screenWidth-135);
+    public static int statusYcoordinate = (int) (screenHeight-70);
     public static short holdPeriod = 2;
 
     public static void selectMicollabFromTaskbar() throws InterruptedException, MalformedURLException {
@@ -77,7 +83,7 @@ public class Tools {
     }
 
 
-    public boolean isSimilarSensitive(BufferedImage actual, BufferedImage expectedImage) {
+    public static boolean isSimilarSensitive(BufferedImage actual, BufferedImage expectedImage) {
         double percentage = 1000;
         int w1 = actual.getWidth();
         int w2 = expectedImage.getWidth();
@@ -145,4 +151,49 @@ public class Tools {
         }
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
+
+    public static BufferedImage takePartialScreenshot(String imageName, int xStartPoint, int yStartPoint, int screenshotWidth, int screenshotHeight) throws IOException {
+        File Screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        BufferedImage Image = ImageIO.read(Screenshot);
+        BufferedImage ImagePartial = Image.getSubimage(xStartPoint,yStartPoint,screenshotWidth,screenshotHeight);
+        ImageIO.write(ImagePartial, "png", Screenshot);
+        FileUtils.copyFile(Screenshot, new File(System.getProperty("user.dir")+"\\src\\test\\resources\\images\\"+imageName+".png"));
+        return ImagePartial;
+    }
+
+    public static BufferedImage takeFullScreenshot(String imageName) throws IOException {
+        File Screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(Screenshot, new File(System.getProperty("user.dir") + "\\src\\test\\resources\\images\\"+imageName+".png"));
+        return ImageIO.read(Screenshot);
+    }
+    public static void clickOnCoordinate(int xCoordinate, int yCoordinate) throws AWTException, InterruptedException {
+        Robot robot = new Robot();
+        robot.mouseMove(xCoordinate,yCoordinate);
+        Thread.sleep(500);
+        Actions actions = new Actions(driver);
+        actions.click().build().perform();
+    }
+    public static void acceptCall(int xCoordinate, int yCoordinate) throws AWTException, InterruptedException {
+        Robot robot = new Robot();
+        Actions actions = new Actions(driver);
+        robot.mouseMove(xCoordinate,yCoordinate);
+        actions.click().build().perform();
+    }
+
+    public static void enableTheStatus(BufferedImage status) throws IOException, InterruptedException, AWTException {
+        //Taking screenshot of the status
+        Actions action = new Actions(driver);
+        BufferedImage statusImage = ImageIO.read(new File(System.getProperty("user.dir")+"\\src\\test\\resources\\images\\status.png"));
+        if (!isSimilarSensitive(statusImage, statusImage)) {
+            clickOnCoordinate((int) (screenWidth - 70), (int) (screenHeight - 60));
+            action.release().build().perform();
+            Thread.sleep(1000);
+            clickOnCoordinate((int) (screenWidth - 50), (int) (screenHeight - 215));
+            action.release().build().perform();
+            Thread.sleep(1000);
+            clickOnCoordinate((int) (screenWidth / 2), (int) (screenHeight / 2));
+            action.release().build().perform();
+        }
+    }
+
 }

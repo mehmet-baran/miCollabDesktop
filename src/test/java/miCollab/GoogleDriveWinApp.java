@@ -107,6 +107,7 @@ public class GoogleDriveWinApp extends CommonSteps {
             registerActions.sendKeys("https://micollab-micc.qmul.ac.uk/ucs/micollab").build().perform();
         }
         registerActions.sendKeys(Keys.ENTER).build().perform();
+        waitFor(1);
         if(registerDriver.findElementsByName("Accept").size()!=0){
             registerDriver.findElementByName("Accept").click();
         }
