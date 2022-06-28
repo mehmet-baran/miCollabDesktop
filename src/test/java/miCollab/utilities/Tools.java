@@ -30,8 +30,6 @@ public class Tools {
     public static short holdButtonYcoordinate = (short) (screenHeight - 100);
     public static short acceptButtonXcoordinate=(short)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
     public static short acceptButtonYcoordinate = (short) ((screenHeight-40)*0.774);
-    public static int statusXcoordinate = (int) (screenWidth-135);
-    public static int statusYcoordinate = (int) (screenHeight-70);
     public static short holdPeriod = 2;
 
     public static void selectMicollabFromTaskbar() throws InterruptedException, MalformedURLException {
@@ -45,7 +43,7 @@ public class Tools {
         newDriver.quit();
     }
 
-    public boolean isSimilar(BufferedImage actual, BufferedImage expectedImage) {
+    public static boolean isSimilar(BufferedImage actual, BufferedImage expectedImage) {
         double percentage = 1000;
         int w1 = actual.getWidth();
         int w2 = expectedImage.getWidth();
@@ -75,9 +73,9 @@ public class Tools {
             }
             double avg = diff / (w1 * h1 * 3);
             percentage = (avg / 255) * 100;
-            //System.out.println("Difference: " + percentage);
+//            System.out.println("Difference: " + percentage);
         }
-        if (percentage > 2) {
+        if (percentage > 5) {
             return false;
         } else return true;
     }
@@ -139,13 +137,11 @@ public class Tools {
     public static void startMicollab(){
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability("app", "C:\\Program Files (x86)\\Mitel\\MiCollab\\MiCollab.exe");
-//        desiredCapabilities.setCapability("app", "com.mitel.ucamobile");
         desiredCapabilities.setCapability("platformName", "Windows");
         desiredCapabilities.setCapability("deviceName", "WindowsPC");
         try {
 
             driver = new WindowsDriver(new URL("http://127.0.0.1:4723"), desiredCapabilities);
-            //driver = new WindowsDriver<WindowsElement>(new URL("http://127.0.0.1:4723"), desiredCapabilities);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -184,7 +180,7 @@ public class Tools {
         //Taking screenshot of the status
         Actions action = new Actions(driver);
         BufferedImage statusImage = ImageIO.read(new File(System.getProperty("user.dir")+"\\src\\test\\resources\\images\\status.png"));
-        if (!isSimilarSensitive(statusImage, statusImage)) {
+        if (!isSimilarSensitive(statusImage, status)) {
             clickOnCoordinate((int) (screenWidth - 70), (int) (screenHeight - 60));
             action.release().build().perform();
             Thread.sleep(1000);
