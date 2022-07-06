@@ -30,7 +30,7 @@ public class Tools {
     public static short holdButtonYcoordinate = (short) (screenHeight - 100);
     public static short acceptButtonXcoordinate=(short)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
     public static short acceptButtonYcoordinate = (short) ((screenHeight-40)*0.774);
-    public static short holdPeriod = 2;
+
 
     public static void selectMicollabFromTaskbar() throws InterruptedException, MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
