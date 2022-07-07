@@ -1,7 +1,6 @@
 package miCollab.utilities;
 
 import io.appium.java_client.windows.WindowsDriver;
-import io.appium.java_client.windows.WindowsElement;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
@@ -30,6 +29,22 @@ public class Tools {
     public static short holdButtonYcoordinate = (short) (screenHeight - 100);
     public static short acceptButtonXcoordinate=(short)(lineXcoordinate + (screenWidth-lineXcoordinate)*0.685);
     public static short acceptButtonYcoordinate = (short) ((screenHeight-40)*0.774);
+    public static BufferedImage stopperImage;
+    public static BufferedImage beforeCallImage;
+    public static BufferedImage incomingCallImage;
+    public static BufferedImage ongoingCallImage;
+    public static BufferedImage deleteHistoryImage;
+    static {
+        try {
+            stopperImage = ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\test\\resources\\images\\stopper.png"));
+            beforeCallImage = ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\test\\resources\\images\\beforeCall.png"));
+            incomingCallImage = ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\test\\resources\\images\\incomingCall.png"));
+            ongoingCallImage = ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\test\\resources\\images\\ongoingCall.png"));
+            deleteHistoryImage = ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\test\\resources\\images\\deleteHistoryTrigger.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     public static void selectMicollabFromTaskbar() throws InterruptedException, MalformedURLException {
@@ -190,6 +205,20 @@ public class Tools {
             clickOnCoordinate((int) (screenWidth / 2), (int) (screenHeight / 2));
             action.release().build().perform();
         }
+    }
+
+    public static void deleteCallHistory() throws InterruptedException, AWTException {
+        //Click on Call History button
+        clickOnCoordinate(90, 270);
+        clickOnCoordinate(90, 270);
+        //Click on ellipsis
+        clickOnCoordinate(1042, 90);
+        //Click on Delete All button
+        clickOnCoordinate(1000,160);
+        //Click on Ok button
+        clickOnCoordinate(1086,272);
+        //Click on Home button
+        clickOnCoordinate(90,115);
     }
 
 }
