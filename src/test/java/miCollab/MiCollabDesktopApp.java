@@ -62,6 +62,7 @@ public class MiCollabDesktopApp extends Tools {
                     }
                 }
                 else if (isSimilarSensitive(stopperCheck, stopperImage)) {
+                    Thread.sleep(1000);
                     break;
                 }
                 else if(isSimilarSensitive(deleteHistoryCheck,deleteHistoryImage)){

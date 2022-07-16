@@ -57,6 +57,7 @@ public class Tools {
         newDriver.findElementByAccessibilityId("Open").click();
         Thread.sleep(2000);
         newDriver.findElementByName("System").click();
+        Thread.sleep(500);
         newDriver.findElementByName("Maximize").click();
         newDriver.quit();
     }
