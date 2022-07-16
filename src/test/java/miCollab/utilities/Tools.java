@@ -55,6 +55,7 @@ public class Tools {
         actions.contextClick(newDriver.findElement(By.name("MiCollab - 1 running window"))).build().perform();
         Thread.sleep(2000);
         newDriver.findElementByAccessibilityId("Open").click();
+        Thread.sleep(2000);
         newDriver.findElementByName("System").click();
         newDriver.findElementByName("Maximize").click();
         newDriver.quit();
@@ -211,6 +212,7 @@ public class Tools {
 
     public static void deleteCallHistory() throws InterruptedException, AWTException {
         //Click on Call History button
+        Thread.sleep(1000);
         clickOnCoordinate(90, 270);
         clickOnCoordinate(90, 270);
         //Click on ellipsis
