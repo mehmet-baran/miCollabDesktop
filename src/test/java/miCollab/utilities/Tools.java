@@ -55,6 +55,8 @@ public class Tools {
         actions.contextClick(newDriver.findElement(By.name("MiCollab - 1 running window"))).build().perform();
         Thread.sleep(2000);
         newDriver.findElementByAccessibilityId("Open").click();
+        newDriver.findElementByName("System").click();
+        newDriver.findElementByName("Maximize").click();
         newDriver.quit();
     }
 
